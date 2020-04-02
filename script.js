@@ -26,12 +26,12 @@ const showTypeOf = function(item) {
 };
 showTypeOf(money);
 showTypeOf(income);
-showTypeOf(deposit);
 // ---
 
 // Получаем данные от пользователя
 addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
 deposit = confirm('Есть ли у вас депозит в банке?');
+showTypeOf(deposit);
 
 // Функция подсчитывает расходы за месяц
 const getExpensesMonth = function() {

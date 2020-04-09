@@ -1,128 +1,56 @@
-'use strict';
+//  Получение элементов со страницы
+const book = document.querySelectorAll(".book"),
+  listOfBooks = document.querySelector(".books"),
+  body = document.querySelector("body"),
+  thirdHead = book[4].querySelector('h2>a'),
+  advertise = document.querySelector('.adv'),
+  chaptersSecondBook = book[0].querySelectorAll('li');
+  chaptersFifthBook = book[5].querySelectorAll('li');
+  chaptersSixthBook = book[2].querySelectorAll('li');
 
-const isNumber = function (n) {
-	return !isNaN(parseFloat(n)) && isFinite(n);
-};
+// Восстановление порядка книг
+listOfBooks.prepend(book[1]);
+book[1].after(book[0]);
+book[0].after(book[4]);
+book[4].after(book[3]);
+book[3].after(book[5]);
+book[5].after(book[2]);
 
-const isString = function (n) {
-	return isNaN(parseFloat(n));
-};
+// Замена фоновой картинки
+body.classList.add('background-image')
 
-let money; // доход за месяц
-const start = function () {
-	do {
-		money = prompt('Ваш месячный доход?');
-	} while (!isNumber(money))
-	money = +money;
-};
+// Исправление текста в заголовке
+thirdHead.textContent = 'Книга 3. this и Прототипы Объектов';
 
-start();
+// Удаление рекламы
+advertise.remove();
 
-let appData = {
-	income: {},
-	addIncome: [],
-	expenses: {},
-	addExpenses: [],
-	deposit: false,
-	percentDeposit: 0,
-	moneyDeposit: 0,
-	mission: 50000,
-	period: 3,
-	budget: money,
-	budgetDay: 0,
-	budgetMonth: 0,
-	expensesMonth: 0,
-	asking: function () {
+// Восстановление порядка глав 2ой книги
+chaptersSecondBook[1].after(chaptersSecondBook[3]);
+chaptersSecondBook[3].after(chaptersSecondBook[6]);
+chaptersSecondBook[6].after(chaptersSecondBook[8]);
+chaptersSecondBook[8].after(chaptersSecondBook[4]);
+chaptersSecondBook[4].after(chaptersSecondBook[5]);
+chaptersSecondBook[5].after(chaptersSecondBook[7]);
+chaptersSecondBook[7].after(chaptersSecondBook[9]);
+chaptersSecondBook[9].after(chaptersSecondBook[2]);
+chaptersSecondBook[2].after(chaptersSecondBook[10]);
 
-		if (confirm('Есть ли у Вас дополнительный источник заработка?')) {
-			let itemIncome, cashIncome;
-			do {
-				itemIncome = prompt('Какой у Вас дополнительный заработок', 'Таксую');
-			} while (!isString(itemIncome))
-			do {
-				cashIncome = +prompt('Сколько в месяц Вы на этом зарабатываете', 10000);
-			} while (!isNumber(cashIncome))
-			appData.income[itemIncome] = cashIncome;
-		}
+// Восстановление порядка глав 3ей книги
+chaptersFifthBook[1].after(chaptersFifthBook[9]);
+chaptersFifthBook[9].after(chaptersFifthBook[3]);
+chaptersFifthBook[3].after(chaptersFifthBook[4]);
+chaptersFifthBook[4].after(chaptersFifthBook[2]);
+chaptersFifthBook[2].after(chaptersFifthBook[6]);
+chaptersFifthBook[6].after(chaptersFifthBook[7]);
+chaptersFifthBook[7].after(chaptersFifthBook[5]);
+chaptersFifthBook[5].after(chaptersFifthBook[8]);
+chaptersFifthBook[8].after(chaptersFifthBook[10]);
 
-		let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
-		appData.addExpenses = addExpenses.toLowerCase().split(', ');
-		appData.deposit = confirm('Есть ли у вас депозит в банке?');
-		for (let i = 0; i < 2; i += 1) {
-
-			let state, rate;
-			do {
-				state = prompt('Введите обязательную статью расходов');
-			} while (!isString(state))
-			do {
-				rate = prompt('Во сколько это обойдется?');
-			} while (!isNumber(rate))
-			appData.expenses[state] = +rate;
-		}
-	},
-	getExpensesMonth: function () { // Функция подсчитывает расходы за месяц
-		let sum = 0;
-		for (const key in appData.expenses) {
-			sum += appData.expenses[key];
-		}
-		appData.expensesMonth = sum;
-	},
-	getBudget: function () { // Функция вычисляет бюджет на месяц и на день
-		appData.budgetMonth = appData.budget - appData.expensesMonth;
-		appData.budgetDay = appData.budgetMonth / 30;
-	},
-	getTargetMonth: function () { // Функция возвращает период, за который будет достигнута цель
-		appData.period = appData.mission / appData.budgetMonth;
-	},
-	getStatusIncome: function () {
-		if (appData.budgetDay > 1200) {
-			return ('У вас высокий уровень дохода')
-		} else if (appData.budgetDay > 600) {
-			return ('У вас средний уровень дохода')
-		} else if (appData.budgetDay < 0) {
-			return ('Что то пошло не так')
-		} else {
-			return ('К сожалению, у вас уровень дохода ниже среднего')
-		}
-	},
-	getInfoDeposit: function () {
-		if (appData.deposit) {
-			do {
-				appData.percentDeposit = prompt('Какой годовой процент?', '10');
-			} while (!isString(appData.percentDeposit))
-			do {
-				appData.moneyDeposit = prompt('Какая сумма депозита?', 10000);
-			} while (!isNumber(appData.moneyDeposit))
-		}
-	},
-	calcSavedMoney: function () {
-		return appData.budgetMonth * appData.period;
-	},
-};
-
-appData.asking();
-appData.getExpensesMonth();
-appData.getBudget();
-appData.getTargetMonth();
-
-// Вывод в консоль расходов за месяц
-console.log('Расходы за месяц: ', appData.expensesMonth);
-
-// Вывод в консоль период достижения цели
-if (appData.period >= 0) {
-	console.log(`Цель будет достигнута за ${appData.period} месяца`);
-} else {
-	console.log('Цель не будет достигнута');
-}
-
-// Выводит уровень дохода в консоль
-console.log(appData.getStatusIncome());
+// Добавление новой главы в 6ую книгу
+const newChapter = document.createElement('li');
+newChapter.textContent = 'Глава 8: За пределами ES6';
+chaptersSixthBook[8].after(newChapter);
 
 
-console.log('Наша программа включает в себя данные: ')
-for (const key in appData) {
-	console.log(`${key} - ${appData[key]}`);
-}
 
-// Вывод в консоль возможных расходов
-console.log(appData.addExpenses.map((item) => `${item[0].toUpperCase()}${item.slice(1, item.length)}`).join(', '))

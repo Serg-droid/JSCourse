@@ -70,7 +70,7 @@ let appData = {
         additionalIncomeValue.value = appData.addIncome.join(', ');
         targetMonthValue.value = Math.ceil(appData.getTargetMonth());
         incomePeriodValue.value = appData.calcPeriod();
-        periodSelect.addEventListener('change', function() {
+        periodSelect.addEventListener('input', function() {
             incomePeriodValue.value = appData.calcPeriod();
         })
     },
@@ -184,19 +184,26 @@ let appData = {
     }
 };
 
-// Вешает обработчик на кнопку "Рассчитать"
-start.addEventListener('click', function() {
-    if(salaryAmount.value === '') {
-        alert('Ошибка, поле "Месячный доход" должно быть заполнено!');
+// Отключаем кнопку "Рассчитать"
+start.disabled = true;
+
+salaryAmount.addEventListener('input', () => {
+    if (salaryAmount.value !== '') {
+        start.disabled = false;
     } else {
-        appData.start();
+        start.disabled = true;
     }
 });
+// Вешает обработчик на кнопку "Рассчитать"
+start.addEventListener('click', appData.start);
+
+
 
 // Вешает обработчик на кнопку "+" для добавления доп. блоков расходов
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
 
+// Вешает обработчик на кнопку "+" для добавления доп. блоков доходов
 incomePlus.addEventListener('click', appData.addIncomeBlock);
 
-periodSelect.addEventListener('change', appData.changePeriodAmount);
+periodSelect.addEventListener('input', appData.changePeriodAmount);
 

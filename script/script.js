@@ -316,19 +316,20 @@ AppData.prototype.eventListeners = function() {
 
     periodSelect.addEventListener('input', _this.changePeriodAmount.bind(_this));
 
+    salaryAmount.addEventListener('input', () => {
+        if (salaryAmount.value !== '') {
+            start.disabled = false;
+        } else {
+            start.disabled = true;
+        }
+    });
+
 };
 
 const appData = new AppData();
 
+appData.reset();
 appData.eventListeners();
 
-// Отключаем кнопку "Рассчитать"
-start.disabled = true;
 
-salaryAmount.addEventListener('input', () => {
-    if (salaryAmount.value !== '') {
-        start.disabled = false;
-    } else {
-        start.disabled = true;
-    }
-});
+
